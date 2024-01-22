@@ -30,6 +30,7 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment.Companion.BottomEnd
 import androidx.compose.ui.Modifier
@@ -40,20 +41,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
-import com.example.smartcameraapp.ViewModels.CameraState
+
 import com.example.smartcameraapp.ViewModels.CameraViewModel
 import com.example.smartcameraapp.ViewModels.SharedViewModel
-import java.util.concurrent.Executor
+
 
 
 @Composable
 fun CameraScreen(navController: NavHostController, sharedViewModel: SharedViewModel) {
         val cameraViewModel: CameraViewModel = viewModel()
-        val cameraState: CameraState by cameraViewModel.state.collectAsStateWithLifecycle()
+        val capturedImage: Bitmap? by cameraViewModel.capturedImage.collectAsState()
 
         Camera(
             onPhotoCaptured = cameraViewModel::savePhoto,
-            lastCapturedPhoto = cameraState.capturedImage,
+            lastCapturedPhoto = capturedImage,
             navController = navController,
             sharedViewModel = sharedViewModel,
             cameraViewModel = cameraViewModel

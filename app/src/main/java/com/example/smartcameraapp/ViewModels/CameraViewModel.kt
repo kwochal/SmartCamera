@@ -13,23 +13,18 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.util.concurrent.Executor
 
-data class CameraState(
-    val capturedImage: Bitmap? = null,
-)
 
 class CameraViewModel: ViewModel() {
 
-    private val _state = MutableStateFlow(CameraState())
-    val state = _state.asStateFlow()
+    private val _capturedImage = MutableStateFlow<Bitmap?>(null)
+    val capturedImage = _capturedImage.asStateFlow()
 
     fun savePhoto(bitmap: Bitmap) {
         viewModelScope.launch {
-            _state.value.capturedImage?.recycle()
-            _state.value = _state.value.copy(capturedImage = bitmap)
+            _capturedImage.value?.recycle()
+            _capturedImage.value = bitmap
         }
     }
-
-
 
     fun capturePhoto(
         context: Context,
@@ -40,20 +35,16 @@ class CameraViewModel: ViewModel() {
 
         cameraController.takePicture(mainExecutor, object : ImageCapture.OnImageCapturedCallback() {
             override fun onCaptureSuccess(image: ImageProxy) {
-                val correctedBitmap: Bitmap = image
-                    .toBitmap()
+                val correctedBitmap: Bitmap = image.toBitmap()
 
                 onPhotoCaptured(correctedBitmap)
                 image.close()
             }
-
-
         })
     }
 
-
     override fun onCleared() {
-        _state.value.capturedImage?.recycle()
+        _capturedImage.value?.recycle()
         super.onCleared()
     }
 }
