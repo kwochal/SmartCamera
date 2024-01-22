@@ -13,8 +13,5 @@ class TextRecognizer {
             .addOnSuccessListener { visionText ->
                 onSuccess(visionText.text)
             }
-
     }
-
-
 }

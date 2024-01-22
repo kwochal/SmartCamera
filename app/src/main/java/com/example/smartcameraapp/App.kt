@@ -4,6 +4,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.smartcameraapp.Screens.MainScreen
 import com.example.smartcameraapp.Screens.PhotoDetailsScreen
 import com.example.smartcameraapp.ViewModels.SharedViewModel
 import com.example.smartcameraapp.ui.theme.SmartCameraAppTheme

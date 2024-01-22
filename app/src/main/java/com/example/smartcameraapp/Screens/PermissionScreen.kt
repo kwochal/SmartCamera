@@ -8,20 +8,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.smartcameraapp.R
 
 
 @Composable
 fun GrantPermissionScreen(
-    onRequestPermission: () -> Unit
-) {
-
-    NoPermissionContent(
-        onRequestPermission = onRequestPermission
-    )
-}
-
-@Composable
-private fun NoPermissionContent(
     onRequestPermission: () -> Unit
 ) {
     Column(
@@ -29,10 +22,14 @@ private fun NoPermissionContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "Please grant the permission to use the camera to use the core functionality of this app.")
         Button(onClick = onRequestPermission) {
-            Text(text = "Grant permission")
+            Text(text = LocalContext.current.getString(R.string.grant_permission))
         }
     }
 }
 
+@Composable
+@Preview
+fun GrantPermissionScreenPreview() {
+    GrantPermissionScreen(onRequestPermission = {})
+}

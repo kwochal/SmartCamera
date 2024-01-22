@@ -23,35 +23,35 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import com.example.smartcameraapp.ViewModels.SharedViewModel
+import com.example.smartcameraapp.R
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun PhotoDetailsScreen(sharedViewModel: SharedViewModel) {
-
+    val context = LocalContext.current
     val selectedPhoto: Bitmap? by sharedViewModel.selectedPhoto.collectAsState()
-    val text: String by sharedViewModel.recognizedText.collectAsState()
-    val objects : String by sharedViewModel.recognizedObjects.collectAsState()
 
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(dimensionResource(R.dimen.medium_padding)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp)
+                    .padding(dimensionResource(R.dimen.medium_padding))
 
             ) {
                 if (selectedPhoto != null) {
 
                     Image(
                         bitmap = remember(selectedPhoto.hashCode()) { selectedPhoto!!.asImageBitmap() },
-                        contentDescription = "Captured photo",
+                        contentDescription = context.getString(R.string.captured_photo),
                         contentScale = ContentScale.Fit,
                         modifier = Modifier
                             .height(500.dp)
@@ -59,28 +59,37 @@ fun PhotoDetailsScreen(sharedViewModel: SharedViewModel) {
                             .background(MaterialTheme.colorScheme.surface)
 
                     )
-                    Spacer(modifier = Modifier.padding(8.dp))
+                    Spacer(modifier = Modifier.padding(dimensionResource(R.dimen.small_padding)))
                 }
             }
-            Text(
-                text = "Recognized Text:",
-                style = MaterialTheme.typography.titleMedium
-            )
-            Spacer(modifier = Modifier.padding(4.dp))
-            Text(
-                text = text.ifBlank { "Could not recognize any" },
-                style = MaterialTheme.typography.bodyMedium
-            )
-            Spacer(modifier = Modifier.padding(8.dp))
-            Text(
-                text = "Recognized Objects:",
-                style = MaterialTheme.typography.titleMedium
-            )
-            Spacer(modifier = Modifier.padding(4.dp))
-            Text(
-                text = objects.ifBlank { "Could not recognize any" },
-                style = MaterialTheme.typography.bodyMedium
-            )
+            RecognizedElements(sharedViewModel = sharedViewModel)
         }
     }
+}
+
+@Composable
+fun RecognizedElements (sharedViewModel: SharedViewModel) {
+    val text: String by sharedViewModel.recognizedText.collectAsState()
+    val objects : String by sharedViewModel.recognizedObjects.collectAsState()
+    val context = LocalContext.current
+    Text(
+        text = context.getString(R.string.text_title),
+        style = MaterialTheme.typography.titleMedium
+    )
+    Spacer(modifier = Modifier.padding(dimensionResource(R.dimen.xsmall_padding)))
+    Text(
+        text = text.ifBlank { context.getString(R.string.nothing_recognized) },
+        style = MaterialTheme.typography.bodyMedium
+    )
+    Spacer(modifier = Modifier.padding(dimensionResource(R.dimen.small_padding)))
+    Text(
+        text = context.getString(R.string.objects_title),
+        style = MaterialTheme.typography.titleMedium
+    )
+    Spacer(modifier = Modifier.padding(dimensionResource(R.dimen.xsmall_padding)))
+    Text(
+        text = objects.ifBlank { context.getString(R.string.nothing_recognized) },
+        style = MaterialTheme.typography.bodyMedium
+    )
+
 }

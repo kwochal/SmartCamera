@@ -26,7 +26,6 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             SmartCameraAppTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -36,42 +35,6 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
-
-
-
-    private fun startCamera() {
-        // Your camera initialization code here
-    }
-}
-@OptIn(ExperimentalPermissionsApi::class)
-@Composable
-fun MainScreen(navController: NavHostController, viewModel : SharedViewModel) {
-
-    val cameraPermissionState: PermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
-
-    MainContent(
-        hasPermission = cameraPermissionState.status.isGranted,
-        onRequestPermission = cameraPermissionState::launchPermissionRequest,
-        navController = navController,
-        viewModel = viewModel
-    )
-}
-
-@Composable
-private fun MainContent(
-    hasPermission: Boolean,
-    onRequestPermission: () -> Unit,
-    navController: NavHostController,
-    viewModel: SharedViewModel
-) {
-
-    if (hasPermission) {
-        CameraScreen(navController, viewModel)
-    }
-    else{
-        GrantPermissionScreen(onRequestPermission)
-    }
 }
 
 
@@ -81,18 +44,4 @@ private fun MainContent(
 
 
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    SmartCameraAppTheme {
-        Greeting("Android")
-    }
-}

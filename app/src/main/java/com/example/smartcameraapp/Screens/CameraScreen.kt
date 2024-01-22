@@ -5,15 +5,14 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageProxy
+
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
@@ -37,13 +36,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 
 import com.example.smartcameraapp.ViewModels.CameraViewModel
 import com.example.smartcameraapp.ViewModels.SharedViewModel
+import com.example.smartcameraapp.R
 
 
 
@@ -84,8 +84,8 @@ private fun Camera(
                 onClick = { cameraViewModel.capturePhoto(context, cameraController, onPhotoCaptured) },
                 icon = { },
                 modifier = Modifier
-                    .size(72.dp)
-                        .clip(CircleShape)
+                    .size(80.dp)
+                    .clip(CircleShape)
             )
         }
     ) { paddingValues: PaddingValues ->
@@ -123,19 +123,16 @@ private fun Camera(
 
 }
 
-
 @Composable
-private fun CapturedPhoto(
-    modifier: Modifier = Modifier,
-    lastCapturedPhoto: Bitmap,
-    onPhotoClicked: () -> Unit
-) {
-     val capturedPhoto: ImageBitmap = remember(lastCapturedPhoto.hashCode()) { lastCapturedPhoto.asImageBitmap() }
-
+private fun CapturedPhoto(modifier: Modifier = Modifier, lastCapturedPhoto: Bitmap,
+    onPhotoClicked: () -> Unit)
+{
+    val capturedPhoto: ImageBitmap = remember(lastCapturedPhoto.hashCode()) { lastCapturedPhoto.asImageBitmap() }
+    val context = LocalContext.current
     Card(
         modifier = modifier
             .size(120.dp)
-            .padding(16.dp),
+            .padding(dimensionResource(R.dimen.medium_padding)),
         shape = MaterialTheme.shapes.medium
     ) {
         Box(
@@ -143,7 +140,7 @@ private fun CapturedPhoto(
         ) {
             Image(
                 bitmap = capturedPhoto,
-                contentDescription = "Last photo",
+                contentDescription = context.getString(R.string.captured_photo),
                 contentScale = androidx.compose.ui.layout.ContentScale.Crop
             )
         }
